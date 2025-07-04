@@ -1,0 +1,65 @@
+name: Auto Deployment
+
+on:
+  push:
+    branches:
+      - main
+      - development
+  workflow_dispatch:
+
+jobs:
+  deploy-staging:
+    if: github.ref == 'refs/heads/development'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: development-deploy
+
+    steps:
+      - name: Simulate Staging - Pull Latest Code
+        run: echo "git pull origin development in /var/www/html/dev"
+
+      - name: Simulate Staging - Composer Update
+        run: echo "php composer.phar update --no-dev in /var/www/html/dev"
+
+      - name: Simulate Staging - Install Node Dependencies
+        run: echo "npm install in /var/www/html/dev"
+
+      - name: Simulate Staging - Build Assets
+        run: echo "npm run build"
+
+      - name: Simulate Staging - Run Migrations
+        run: echo "php artisan migrate --force"
+
+      - name: Simulate Staging - Clear Cache
+        run: echo "php artisan optimize:clear"
+
+      - name: Simulate Staging - Restart Background Jobs
+        run: echo "sudo supervisorctl restart all"
+
+  deploy-production:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: production-deploy
+
+    steps:
+      - name: Simulate Production - Pull Latest Code
+        run: echo "git pull origin main in /var/www/html/live"
+
+      - name: Simulate Production - Composer Update
+        run: echo "php composer.phar update --no-dev in /var/www/html/live"
+
+      - name: Simulate Production - Install Node Dependencies
+        run: echo "npm install in /var/www/html/live"
+
+      - name: Simulate Production - Build Assets
+        run: echo "npm run build"
+
+      - name: Simulate Production - Run Migrations
+        run: echo "php artisan migrate --force"
+
+      - name: Simulate Production - Clear Cache
+        run: echo "php artisan optimize:clear"
+
+      - name: Simulate Production - Restart Background Jobs
+        run: echo "sudo supervisorctl restart all"
