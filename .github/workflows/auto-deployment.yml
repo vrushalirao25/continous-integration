@@ -1,0 +1,22 @@
+name: Auto Deployment
+
+on:
+  push:
+    branches:
+      - main
+      - development
+
+jobs:
+  deploy-staging:
+    if: github.ref == 'refs/heads/development'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛠 Simulate Staging Deploy
+        run: echo "🚀 Staging deploy from 'development' branch."
+
+  deploy-production:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛠 Simulate Production Deploy
+        run: echo "🚀 Production deploy from 'main' branch."
