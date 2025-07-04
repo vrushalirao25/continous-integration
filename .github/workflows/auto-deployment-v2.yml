@@ -1,4 +1,4 @@
-name: Auto Deployment
+name: Auto Deployment V2
 
 on:
   push:
